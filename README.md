@@ -1,6 +1,6 @@
 # Map Beer
 
-O Map Beer é uma aplicação de busca de estabelecimentos de cervejaria, com representações no mapa e em listagem possuindo a possibilidade do usuário buscar um estabelecimento por nome, estado e tipo, além disso o Map Beer possui um ambiente de visualização dos estabelecimentos favoritados pelo usuário.
+O Map Beer é uma aplicação de busca de estabelecimentos de cervejaria, com indicações de localidade no mapa e em listagem com a possibilidade do usuário realizar uma buscar por nome, estado e tipo de estabelecimento. Além disso o Map Beer possui um ambiente de visualização dos estabelecimentos favoritados pelo usuário, para futuras consultas.
 
 ## Instalação
 

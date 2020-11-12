@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Animated, Dimensions, Picker } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Dimensions, Picker, Linking } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import Favorite from '../../assets/Favorite'
 import FavoriteSelected from '../../assets/FavoriteSelected'
@@ -19,8 +19,8 @@ const ModalInfo = ({ data, show, close }) => {
 
   const openModal = () => {
     Animated.sequence([
-      Animated.timing(state.container, { toValue: 0, duration: 100, useNativeDriver:true }),
-      Animated.timing(state.opacity, { toValue: 1, duration: 300, useNativeDriver:true }),
+      Animated.timing(state.container, { toValue: 0, duration: 100, useNativeDriver: true }),
+      Animated.timing(state.opacity, { toValue: 1, duration: 300, useNativeDriver: true }),
       Animated.spring(state.modal, { toValue: 0, bounciness: 5, useNativeDriver: true })
     ]).start()
   }
@@ -28,8 +28,8 @@ const ModalInfo = ({ data, show, close }) => {
   const closeModal = () => {
     Animated.sequence([
       Animated.timing(state.modal, { toValue: height, duration: 250, useNativeDriver: true }),
-      Animated.timing(state.opacity, { toValue: 0, duration: 300, useNativeDriver:true }),
-      Animated.timing(state.container, { toValue: height, duration: 100, useNativeDriver:true })
+      Animated.timing(state.opacity, { toValue: 0, duration: 300, useNativeDriver: true }),
+      Animated.timing(state.container, { toValue: height, duration: 100, useNativeDriver: true })
     ]).start()
   }
   const addFavorite = async () => {
@@ -91,13 +91,17 @@ const ModalInfo = ({ data, show, close }) => {
         <View style={styles.indicator} />
         <View style={{ flex: 1, padding: 10 }}>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontWeight: 'bold', fontSize: 18, textAlign:"center", color:"#E28703" }}>{data.name}</Text>
+            <Text style={{ fontWeight: 'bold', fontSize: 18, textAlign: "center", color: "#E28703" }}>{data.name}</Text>
             <Text>Cidade: {data.city}</Text>
             <Text>Estado: {data.state}</Text>
             <Text>Endereço: {data.street}</Text>
             <Text>País: {data.country}</Text>
             <Text>Contato: {data.phone}</Text>
-            <Text>Site: {data.website_url}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text>Site: </Text>
+              <TouchableOpacity onPress={() => Linking.openURL(item.website_url)}>
+                <Text style={{ fontStyle: 'italic', color: 'blue' }}>{item.website_url}</Text>
+              </TouchableOpacity></View>
           </View>
         </View>
         <View style={{ flexDirection: 'row', alignItems: "center" }}>

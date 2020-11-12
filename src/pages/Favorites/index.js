@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Linking, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import Favorite from '../../assets/Favorite';
 import FavoriteSelected from '../../assets/FavoriteSelected';
@@ -60,6 +60,10 @@ const Favorites = (props) => {
                 <Text style={{}}>{item.city}</Text>
                 <Text style={{}}>{item.street}</Text>
                 <Text style={{}}>{item.state}</Text>
+                <TouchableOpacity onPress={() => Linking.openURL(item.website_url)}>
+                  <Text style={{ fontStyle: 'italic', color: 'blue' }}>{item.website_url}</Text>
+                </TouchableOpacity>
+
               </View>
               <TouchableOpacity onPress={() => { addFavorite(index) }}>
                 <SvgXml xml={FavoriteSelected} />
