@@ -1,30 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Linking, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Linking, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import Favorite from '../../assets/Favorite';
 import FavoriteSelected from '../../assets/FavoriteSelected';
 import Footer from '../../components/Footer';
-import reactotron from 'reactotron-react-native';
-import Lupa from '../../assets/Lupa';
-import Modal from '../Map/Modal';
-
 // import { Container } from './styles';
 
 const Favorites = (props) => {
   const [brewery, setBrewery] = useState([])
-  const [favorites, setFavorites] = useState([])
-  const [search, setSearch] = useState('')
-  const [visibleModal, setVisibleModal] = useState(false)
-  const [filters, setFilters] = useState({ query: '', per_page: 50, by_state: '', by_type: '' })
 
   useEffect(() => {
-    getBrewey()
-  }, [])
-  const getBrewey = async () => {
     getFavorites()
-  }
+  }, [])
   const getFavorites = async () => {
     let res = await AsyncStorage.getItem('favorites')
     setBrewery([...JSON.parse(res)])

@@ -1,12 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, FlatList, ActivityIndicator } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import Favorite from '../../assets/Favorite';
 import FavoriteSelected from '../../assets/FavoriteSelected';
 import Footer from '../../components/Footer';
-import reactotron from 'reactotron-react-native';
 import Lupa from '../../assets/Lupa';
 import Modal from '../Map/Modal';
 import ModalInfo from '../Map/ModalInfo';
@@ -117,7 +116,6 @@ const List = (props) => {
           <TextInput placeholder="Pesquisar" value={filters.query} onChangeText={search => {
             setFilters(state => ({ ...state, query: search }))
             setTimeout(() => {
-
               getSearchBrewery()
             }, 100);
           }} placeholderTextColor="#000" style={{ flex: 1, color: '#E28703', height: 45, paddingLeft: 10 }} />

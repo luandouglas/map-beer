@@ -1,11 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Animated, Dimensions, Picker, Linking } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Dimensions, Linking } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import Favorite from '../../assets/Favorite'
 import FavoriteSelected from '../../assets/FavoriteSelected'
-import Star from '../../assets/Star'
-import StarSelected from '../../assets/StarSelected'
 
 const { height } = Dimensions.get('window')
 
@@ -99,8 +97,8 @@ const ModalInfo = ({ data, show, close }) => {
             <Text>Contato: {data.phone}</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text>Site: </Text>
-              <TouchableOpacity onPress={() => Linking.openURL(item.website_url)}>
-                <Text style={{ fontStyle: 'italic', color: 'blue' }}>{item.website_url}</Text>
+              <TouchableOpacity onPress={() => Linking.openURL(data.website_url)}>
+                <Text style={{ fontStyle: 'italic', color: 'blue' }}>{data.website_url}</Text>
               </TouchableOpacity></View>
           </View>
         </View>

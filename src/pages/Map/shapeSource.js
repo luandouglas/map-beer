@@ -1,6 +1,6 @@
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import React, { useState } from 'react';
-import { View, Modal, Text } from 'react-native';
+import React from 'react';
+import { View, } from 'react-native';
 
 // import { Container } from './styles';
 
