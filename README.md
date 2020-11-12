@@ -6,7 +6,7 @@ O Map Beer é uma aplicação de busca de estabelecimentos de cervejaria, com re
 
 Para utilizar a aplicação é necessário:
 
-[NodeJS](https://nodejs.org/en/)  O Map Beer é uma aplicação de busca de estabelecimentos de cervejaria, com representação no mapa e em listagem com possibilidade de busca por nome e filtros de estado e tipo de estabelecimento, além disso o Map Beer possui um ambiente de visualização dos estabelecimentos favoritados pelo usuário.
+[NodeJS](https://nodejs.org/en/)
 [JDK8](https://www.oracle.com/br/java/technologies/javase/javase-jdk8-downloads.html)  
 [Android Studio](https://developer.android.com/studio)  
 [Python 2 ou Superior](https://www.python.org/downloads/)  
