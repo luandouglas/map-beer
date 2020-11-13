@@ -15,6 +15,8 @@ import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 export default function Map(props) {
   const [location, setLocation] = useState({ loaded: false, coordinates: { lat: '', lng: '' } })
   const [brewery, setBrewery] = useState([])
+  const [searchBrewery, setSearchBrewery] = useState([])
+  const [showSearch, setShowSearch] = useState(false)
   const [hasLocationPermission, setHasLocationPermission] = useState(false)
   const [search, setSearch] = useState('')
   const [visibleModal, setVisibleModal] = useState(false)
@@ -90,7 +92,7 @@ export default function Map(props) {
     if (hasLocationPermission) {
       Geolocation.getCurrentPosition(position =>
         onSuccess({ latitude: position.coords.latitude, longitude: position.coords.longitude }),
-        error => reactotron.log(error))
+        error => { })
       Geolocation.watchPosition(position =>
         onSuccess({ latitude: position.coords.latitude, longitude: position.coords.longitude }))
     }
@@ -107,6 +109,10 @@ export default function Map(props) {
         title: 'Permissão para utilizar a localização',
         message: 'O Map Beer precisa do acesso a sua localização'
       })
+      await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION, {
+        title: 'Permissão para utilizar a localização',
+        message: 'O Map Beer precisa do acesso a sua localização'
+      })
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         setHasLocationPermission(true);
       } else {
@@ -114,7 +120,7 @@ export default function Map(props) {
       }
 
     } catch (err) {
-      reactotron.log(err)
+
     }
 
 
@@ -126,10 +132,16 @@ export default function Map(props) {
       <View style={styles.headerSearch}>
         <View style={styles.headerTextInput}>
           <SvgXml xml={Lupa} width={20} height={20} />
-          <TextInput placeholder="Pesquisar" value={search} onChangeText={search => {
-            setSearch(search)
-            getSearchBrewery()
-          }} placeholderTextColor="#000" style={{ flex: 1, color: '#E28703', height: 45, paddingLeft: 10 }} />
+          <TextInput
+            placeholder="Pesquisar"
+            value={search}
+            onChangeText={search => {
+              setSearch(search)
+              getSearchBrewery()
+              setShowSearch(true)
+            }}
+            placeholderTextColor="#000"
+            style={{ flex: 1, color: '#E28703', height: 45, paddingLeft: 10 }} />
           <TouchableOpacity onPress={() => setSearch('')} style={{ width: 20, height: 20, alignItems: "center", borderRadius: 10, backgroundColor: '#CCC' }}><Text style={{ color: '#FFF' }}>X</Text></TouchableOpacity>
         </View>
         <TouchableOpacity>
@@ -140,20 +152,21 @@ export default function Map(props) {
 
       {search != '' ?
         searchBrewery.length > 0 ?
-          <ScrollView scrollEnabled style={{ backgroundColor: '#FFF', maxHeight: 250 }}>
-            {searchBrewery.map(item => <TouchableOpacity onPress={() => {
-              getBreweryId(item.id)
+          showSearch ?
+            <ScrollView scrollEnabled style={{ backgroundColor: '#FFF', maxHeight: 250 }}>
+              {searchBrewery.map(item => <TouchableOpacity onPress={() => {
+                getBreweryId(item.id)
 
-            }} style={{ paddingVertical: 10, paddingLeft: 3, borderBottomColor: '#ddd', borderBottomWidth: 1 }}>
-              <Text style={{ fontWeight: '800', fontSize: 16 }}>{item.name}</Text>
-            </TouchableOpacity>)}
+              }} style={{ paddingVertical: 10, paddingLeft: 3, borderBottomColor: '#ddd', borderBottomWidth: 1 }}>
+                <Text style={{ fontWeight: '800', fontSize: 16 }}>{item.name}</Text>
+              </TouchableOpacity>)}
 
-          </ScrollView> : null : null
+            </ScrollView> : null : null : null
       }
       <View style={{ flex: 1 }}>
 
         <MapboxGL.MapView
-
+          onPress={() => setShowSearch(false)}
           rotateEnabled={false}
           centerCoordinate={[location.coordinates.lng, location.coordinates.lat]}
           style={{ flex: 1 }}
@@ -211,7 +224,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: 'center',
     backgroundColor: '#FFF',
-    padding: 10, height: 45,
+    padding: 10,
+    height: 45,
     marginVertical: 5,
     marginRight: 10,
     borderRadius: 50

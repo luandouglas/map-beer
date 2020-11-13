@@ -12,7 +12,7 @@ const App = () => {
     setFavorites()
     setTimeout(() => {
       setLoaded(true);
-    }, 2000)
+    }, 3000)
   }, [])
   const setFavorites = async () => {
     if(await AsyncStorage.getItem('favorites') == null){

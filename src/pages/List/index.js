@@ -20,30 +20,40 @@ const List = (props) => {
 
   const [visibleModal, setVisibleModal] = useState(false)
   const [visibleModalInfo, setVisibleModalInfo] = useState(false)
-  const [filters, setFilters] = useState({ query: '', page: 1, per_page: 10, by_state: '', by_type: '' })
+  const [filters, setFilters] = useState({ query: '', page: 1, per_page: 10, by_state: '', by_type: '',by_name:"" })
 
   useEffect(() => {
     getBrewey()
   }, [])
   const getBrewey = async () => {
     setLoading(true);
+
     Axios.get('https://api.openbrewerydb.org/breweries', { params: { ...filters } }).then(res => {
-      setBrewery([...brewery, ...res.data])
+      if (filters.page == 1)
+        setBrewery(res.data)
+      else setBrewery([...brewery, ...res.data])
     })
+    setLoading(false);
+    getFavorites()
+  }
+  const getFilterBrewery = async (filter) => {
+    setFilters(state => ({
+      ...filter,
+      by_name: state.by_name,
+      page: 1,
+    }))
+    Axios.get(`https://api.openbrewerydb.org/breweries`, { params: { ...filters } }).then(res => {
+      setBrewery(res.data)
+    })
+
+    setVisibleModal(false)
+  }
+  const getMoreBrewery = async () => {
     setFilters(state => ({
       ...state,
       page: state.page + 1,
     }))
-    setLoading(false);
-    getFavorites()
-
-  }
-  const getSearchBrewery = async (filter = {}) => {
-
-    Axios.get(`https://api.openbrewerydb.org/breweries/search`, { params: { ...filter, query: filters.query, per_page: 50 } }).then(res => {
-      setBrewery(res.data)
-    })
-    setVisibleModal(false)
+    getBrewey();
   }
   const getFavorites = async () => {
     let res = await AsyncStorage.getItem('favorites')
@@ -101,9 +111,10 @@ const List = (props) => {
     )
   }
   const renderFooter = () => {
+    if (!loading) return null;
     return (
       <View style={{ alignSelf: 'center' }}>
-        <ActivityIndicator color="#000" />
+        <ActivityIndicator color="#000" size="large" />
       </View>
     )
   }
@@ -113,11 +124,10 @@ const List = (props) => {
       <View style={styles.headerSearch}>
         <View style={styles.headerTextInput}>
           <SvgXml xml={Lupa} width={20} height={20} />
-          <TextInput placeholder="Pesquisar" value={filters.query} onChangeText={search => {
-            setFilters(state => ({ ...state, query: search }))
-            setTimeout(() => {
-              getSearchBrewery()
-            }, 100);
+          <TextInput placeholder="Pesquisar" value={filters.by_name} onChangeText={search => {
+            setFilters(state => ({ ...state, by_name: search }))
+            getFilterBrewery({ ...filters, by_name: search })
+
           }} placeholderTextColor="#000" style={{ flex: 1, color: '#E28703', height: 45, paddingLeft: 10 }} />
           <TouchableOpacity onPress={() => setFilters(state => ({ ...state, query: '' }))} style={{ width: 20, height: 20, alignItems: "center", borderRadius: 10, backgroundColor: '#CCC' }}><Text style={{ color: '#FFF' }}>X</Text></TouchableOpacity>
         </View>
@@ -126,8 +136,9 @@ const List = (props) => {
         </TouchableOpacity>
       </View>
       <FlatList
-        onEndReached={() => getBrewey()}
-        onEndReachedThreshold={0.1}
+        onEndReached={() => getMoreBrewery()}
+        onEndReachedThreshold={0.5}
+        initialNumToRender={10}
         contentContainerStyle={styles.list}
         data={brewery}
         keyExtractor={e => e.id}
@@ -135,7 +146,9 @@ const List = (props) => {
         ListFooterComponent={renderFooter}
       />
       <Modal
-        setFilter={filter => getSearchBrewery(filter)}
+        setFilter={filter => {
+          getFilterBrewery(filter)
+        }}
         show={visibleModal}
         close={() => setVisibleModal(false)}
       />
